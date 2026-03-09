@@ -1,72 +1,78 @@
-document.addEventListener("DOMContentLoaded", async () => {
-  const track = document.getElementById("carousel-track");
-  const prevBtn = document.querySelector(".carousel-btn.prev");
-  const nextBtn = document.querySelector(".carousel-btn.next");
 
-  let index = 0;
-  const visibleCards = 5;
-  const cardWidth = 200; // приблизна ширина картки
-  const gap = 16;
+function coinDisplayName(symbol, cgName) {
+  const base = symbol.replace(/USDT$/, "");
+  const full = cgName || base;
+  return `${full} (${base})`;
+}
 
-  async function loadCarousel() {
-    const res = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=30&page=1&sparkline=false");
-    const data = await res.json();
-    data.forEach(coin => {
-      const card = document.createElement("div");
-      card.className = "crypto-card";
-      card.style.background = "#161b22";
-      card.style.borderRadius = "12px";
-      card.style.padding = "1rem";
-      card.style.minWidth = cardWidth + "px";
-      card.style.textAlign = "center";
-      card.innerHTML = `
-        <img src="${coin.image}" alt="${coin.name}" style="width:40px;height:40px;" />
-        <h3>${coin.name}</h3>
-        <p>$${coin.current_price.toFixed(5)}</p>
-        <p style="color:${coin.price_change_percentage_24h >= 0 ? 'lime' : 'red'};">
-          ${coin.price_change_percentage_24h.toFixed(2)}%
-        </p>
-      `;
-      track.appendChild(card);
+function safeNum(n) {
+  const x = parseFloat(n);
+  return Number.isFinite(x) ? x : null;
+}
+
+async function loadTopCoinsCarousel() {
+  try {
+    // Binance tickers
+    const binanceRes = await fetch("https://api.binance.com/api/v3/ticker/24hr");
+    const tickers = await binanceRes.json();
+    if (!Array.isArray(tickers)) throw new Error("Unexpected Binance response");
+
+    // Top by USDT quote volume
+    const usdtPairs = tickers.filter(t => t.symbol && t.symbol.endsWith("USDT"));
+    usdtPairs.sort((a,b) => parseFloat(b.quoteVolume||0) - parseFloat(a.quoteVolume||0));
+    const top30 = usdtPairs.slice(0, 30);
+
+    // CoinGecko markets (for images + proper names); pull top 250 to get wider symbol coverage
+    const cgRes = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false");
+    const cgData = await cgRes.json();
+    const cgBySymbol = {};
+    cgData.forEach(c => { if (c && c.symbol) cgBySymbol[c.symbol.toUpperCase()] = c; });
+
+    const container = document.getElementById("cards-container");
+    container.innerHTML = "";
+
+    top30.forEach(c => {
+      const base = c.symbol.replace(/USDT$/, "");
+      const cg = cgBySymbol[base];
+      const name = coinDisplayName(c.symbol, cg ? cg.name : undefined);
+      const image = cg && cg.image ? cg.image : "https://via.placeholder.com/36?text=%20"; // fallback transparent
+      const price = safeNum(c.lastPrice);
+      const change = safeNum(c.priceChangePercent);
+      const cls = (change !== null && change >= 0) ? "up" : "down";
+      const priceTxt = (price !== null) ? "$" + price.toFixed(5) : "—";
+      const changeTxt = (change !== null) ? (change >=0 ? "+" : "") + change.toFixed(2) + "%" : "—";
+
+      container.insertAdjacentHTML('beforeend', `
+        <div class="swiper-slide">
+          <h3 class="coin-name"><img class="coin-logo" src="${image}" alt="${name}">${name}</h3>
+          <div class="price">${priceTxt}</div>
+          <div class="change ${cls}">${changeTxt}</div>
+        </div>
+      `);
     });
+
+    // Init Swiper (5 per view, responsive, loop + autoplay)
+    new Swiper(".mySwiper", {
+      slidesPerView: 5,
+      spaceBetween: 20,
+      loop: true,
+      autoplay: { delay: 2500, disableOnInteraction: false },
+      navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
+      breakpoints: {
+        0:   { slidesPerView: 1 },
+        480: { slidesPerView: 2 },
+        768: { slidesPerView: 3 },
+        1024:{ slidesPerView: 4 },
+        1200:{ slidesPerView: 5 }
+      }
+    });
+  } catch (e) {
+    console.error("Error loading top coins", e);
+    const container = document.getElementById("cards-container");
+    if (container && container.innerHTML.trim() === "") {
+      container.innerHTML = '<div class="swiper-slide">Error loading data</div>';
+    }
   }
+}
 
-  function updateCarousel() {
-    track.style.transform = `translateX(-${index * (cardWidth + gap)}px)`;
-  }
-
-  prevBtn.addEventListener("click", () => {
-    if (index > 0) index--;
-    updateCarousel();
-  });
-
-  nextBtn.addEventListener("click", () => {
-    if (index < track.children.length - visibleCards) index++;
-    updateCarousel();
-  });
-
-  await loadCarousel();
-
-  // TradingView widgets
-  new TradingView.widget({
-    "container_id": "tradingview_btc",
-    "autosize": true,
-    "symbol": "BINANCE:BTCUSDT",
-    "interval": "D",
-    "timezone": "Etc/UTC",
-    "theme": "dark",
-    "style": "1",
-    "locale": "en"
-  });
-
-  new TradingView.widget({
-    "container_id": "tradingview_eth",
-    "autosize": true,
-    "symbol": "BINANCE:ETHUSDT",
-    "interval": "D",
-    "timezone": "Etc/UTC",
-    "theme": "dark",
-    "style": "1",
-    "locale": "en"
-  });
-});
+document.addEventListener("DOMContentLoaded", loadTopCoinsCarousel);
