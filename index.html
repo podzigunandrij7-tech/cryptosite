@@ -5,131 +5,75 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CryptoLab — Trust Is The New Currency</title>
   <meta name="description" content="Dark theme crypto landing with live crypto prices." />
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style>
-/* Fix charts layout */
-.charts-section {
-  padding: 40px;
-}
-.grid-charts {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-}
-@media (max-width: 768px) {
-  .grid-charts {
-    grid-template-columns: 1fr;
-  }
-}
-</style>
-
+  
+  <!-- Підключення зовнішнього CSS -->
+  <link rel="stylesheet" href="css/styles.css" />
+  
+  <!-- Swiper CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
 
-<style>
-/* === Swiper Cards Carousel === */
-.cards-section {
-  padding: 40px;
-}
-.swiper {
-  width: 100%;
-  padding-bottom: 40px;
-}
-.swiper-slide {
-  background: #1e1e1e;
-  border-radius: 12px;
-  padding: 20px;
-  text-align: center;
-  color: #fff;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.6);
-}
-.swiper-slide .price {
-  font-size: 1.2em;
-  margin: 10px 0;
-}
-.swiper-slide .change.up { color: #4caf50; }
-.swiper-slide .change.down { color: #f44336; }
-</style>
-<style>
-/* === Swiper Cards Carousel (Top 30) === */
-.cards-section { padding: 40px; }
-.swiper { width: 100%; padding-bottom: 40px; }
-.swiper-wrapper { align-items: stretch; }
-.swiper-slide {
-  background: #1e1e1e;
-  border-radius: 12px;
-  padding: 20px;
-  text-align: center;
-  color: #fff;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.6);
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.coin-name { margin: 0 0 8px 0; font-size: 1.05em; font-weight: 600; color: #e0e0e0; }
-.swiper-slide .price { font-size: 1.2em; margin: 6px 0 10px 0; }
-.swiper-slide .change { font-size: 1.12em; font-weight: 800; }
-.swiper-slide .change.up { color: #4caf50; }
-.swiper-slide .change.down { color: #f44336; }
-</style>
+  <style>
+    /* Тимчасові стилі для адаптивності, які ми обговорювали */
+    .nav { position: relative; display: flex; justify-content: space-between; align-items: center; }
+    
+    @media (max-width: 768px) {
+      .site-header .menu {
+        display: none; 
+        position: absolute;
+        top: 100%;
+        left: 0;
+        flex-direction: column;
+        background: #0b0f1a;
+        width: 100%;
+        padding: 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        z-index: 1000;
+      }
+      .site-header .menu.active { display: flex; }
+      .burger { display: block; cursor: pointer; background: none; border: none; color: #fff; font-size: 2rem; line-height: 1; }
+      .actions { display: none; } /* Ховаємо кнопки входу на мобільних для чистоти */
+    }
+
+    @media (min-width: 769px) {
+      .burger { display: none; }
+      .site-header .menu { display: flex; gap: 20px; }
+    }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 20px 0;
+    }
+    .chart-container { background: #111; border-radius: 12px; overflow: hidden; }
+  </style>
 </head>
 <body>
+
   <!-- Header -->
   <header class="site-header" id="header">
     <div class="container nav">
       <a class="logo" href="#"><span class="logo-dot"></span>CryptoLab</a>
-      /* Мобільне меню (ховаємо за замовчуванням) */
-@media (max-width: 768px) {
-  .site-header .menu {
-    display: none !important; /* Ховаємо */
-    position: absolute;
-    top: 100%;
-    left: 0;
-    flex-direction: column !important;
-    background: #0b0f1a; /* Колір фону твого сайту */
-    width: 100%;
-    padding: 20px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-  }
+      
+      <!-- Кнопка бургер для мобільних -->
+      <button class="burger" id="burger-menu">☰</button>
 
-  /* Клас, який ми будемо додавати через JS */
-  .site-header .menu.active {
-    display: flex !important;
-  }
-
-  /* Стиль кнопки-бургера */
-  .burger {
-    display: block;
-    cursor: pointer;
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 1.5rem;
-  }
-}
-
-/* На комп'ютері кнопку ховаємо */
-@media (min-width: 769px) {
-  .burger { display: none; }
-}
-
-      <nav class="menu" id="menu">
+      <nav class="menu" id="nav-menu">
         <a class="nav-pill" href="#">Features</a>
         <a class="nav-pill" href="#">Markets</a>
         <a class="nav-pill" href="#">Tools</a>
         <a class="nav-pill" href="#">Learn</a>
         <a class="nav-pill" href="#">About</a>
       </nav>
+
       <div class="actions">
         <a class="btn ghost auth-link" href="#">Login</a>
         <a class="btn primary auth-link" href="#">Sign up</a>
       </div>
-      
     </div>
   </header>
 
@@ -138,98 +82,65 @@
     <div class="container hero-inner glass">
       <div class="hero-copy">
         <h1>Trust Is The <span class="accent">New Currency</span></h1>
-        <p>We build tools for cryptocurrency analytics: charts, live prices, mining calculators and exchange integrations. Fast, lightweight and built with clean code.</p>
+        <p>We build tools for cryptocurrency analytics: charts, live prices, mining calculators and exchange integrations.</p>
         <div class="cta">
           <a class="btn cta-btn" href="#">Get Started</a>
           <a class="btn ghost" href="#">Documentation</a>
         </div>
       </div>
-
-     
     </div>
   </section>
 
-<section class="cards-section">
-  <div class="swiper mySwiper">
-    <div class="swiper-wrapper" id="cards-container">
-      <!-- Cards injected dynamically -->
+  <!-- Carousel Section -->
+  <section class="cards-section">
+    <div class="container">
+      <div class="swiper mySwiper">
+        <div class="swiper-wrapper" id="cards-container">
+          <!-- Cards injected dynamically via JS -->
+        </div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
     </div>
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
-  </div>
-</section>
+  </section>
 
-
-
-
-
-
-<section class="charts">
-  <h2>Market Charts</h2>
-  <div class="charts-grid">
-
-<div class="chart-container">
-  <iframe src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_BTCUSDT&symbol=BINANCE:BTCUSDT&interval=60&hidesidetoolbar=1&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=[]&hideideas=1&theme=dark"
-          width="100%" height="400" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
-</div>
-
-
-<div class="chart-container">
-  <iframe src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_ETHUSDT&symbol=BINANCE:ETHUSDT&interval=60&hidesidetoolbar=1&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=[]&hideideas=1&theme=dark"
-          width="100%" height="400" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
-</div>
-
-
-<div class="chart-container">
-  <iframe src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_BNBUSDT&symbol=BINANCE:BNBUSDT&interval=60&hidesidetoolbar=1&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=[]&hideideas=1&theme=dark"
-          width="100%" height="400" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
-</div>
-
-
-<div class="chart-container">
-  <iframe src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_LTCUSDT&symbol=BINANCE:LTCUSDT&interval=60&hidesidetoolbar=1&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=[]&hideideas=1&theme=dark"
-          width="100%" height="400" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
-</div>
-
-
-<div class="chart-container">
-  <iframe src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_XRPUSDT&symbol=BINANCE:XRPUSDT&interval=60&hidesidetoolbar=1&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=[]&hideideas=1&theme=dark"
-          width="100%" height="400" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
-</div>
-
-
-<div class="chart-container">
-  <iframe src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_ADAUSDT&symbol=BINANCE:ADAUSDT&interval=60&hidesidetoolbar=1&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=[]&hideideas=1&theme=dark"
-          width="100%" height="400" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
-</div>
-
-
-<div class="chart-container">
-  <iframe src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_SOLUSDT&symbol=BINANCE:SOLUSDT&interval=60&hidesidetoolbar=1&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=[]&hideideas=1&theme=dark"
-          width="100%" height="400" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
-</div>
-
-
-<div class="chart-container">
-  <iframe src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_DOGEUSDT&symbol=BINANCE:DOGEUSDT&interval=60&hidesidetoolbar=1&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=[]&hideideas=1&theme=dark"
-          width="100%" height="400" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
-</div>
-
-  </div>
-</section>
-
+  <!-- Charts Section -->
+  <section class="charts container">
+    <h2>Market Charts</h2>
+    <div class="charts-grid">
+      <div class="chart-container">
+        <iframe src="https://s.tradingview.com" width="100%" height="400" frameborder="0" loading="lazy"></iframe>
+      </div>
+      <div class="chart-container">
+        <iframe src="https://s.tradingview.com" width="100%" height="400" frameborder="0" loading="lazy"></iframe>
+      </div>
+      <div class="chart-container">
+        <iframe src="https://s.tradingview.com" width="100%" height="400" frameborder="0" loading="lazy"></iframe>
+      </div>
+      <div class="chart-container">
+        <iframe src="https://s.tradingview.com" width="100%" height="400" frameborder="0" loading="lazy"></iframe>
+      </div>
+    </div>
+  </section>
 
   <footer class="site-footer">
     <div class="container">
-      <p>© <span id="year"></span> CryptoLab. Live prices via CoinGecko API.</p>
+      <p>© <span id="year"></span> CryptoLab. Live prices via CoinGecko & Binance API.</p>
     </div>
   </footer>
 
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net"></script>
+  <script src="js/script.js"></script>
   
-
-
-
-
-  <script src="script.js"></script>
+  <script>
+    // Скрипт для відкриття меню
+    document.getElementById('burger-menu').addEventListener('click', function() {
+      document.getElementById('nav-menu').classList.toggle('active');
+    });
+    
+    // Встановлення поточного року
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
