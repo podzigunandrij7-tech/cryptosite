@@ -82,6 +82,21 @@ if (burger && menu) {
         menu.classList.toggle('active');
     });
 }
+document.addEventListener('DOMContentLoaded', () => {
+    // Шукаємо кнопку та саме меню (перевір, щоб id збігалися з твоїм HTML)
+    const burgerBtn = document.querySelector('.burger-menu'); // або за id, якщо є
+    const navMenu = document.querySelector('.nav-links'); // клас твого списку меню
+
+    if (burgerBtn && navMenu) {
+        burgerBtn.addEventListener('click', () => {
+            // Перемикаємо клас active для обох елементів
+            burgerBtn.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+    }
+});
 
 // Запуск
 document.addEventListener("DOMContentLoaded", loadData);
+
+
