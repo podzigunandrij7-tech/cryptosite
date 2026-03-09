@@ -1,76 +1,33 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CryptoLab — Trust Is The New Currency</title>
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com" rel="stylesheet">
-  
-  <link rel="stylesheet" href="css/styles.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net" />
-</head>
-<body>
+let cryptoSwiper;
 
-  <header class="site-header">
-    <div class="container nav">
-      <a class="logo" href="#"><span class="logo-dot"></span>CryptoLab</a>
-      
-      <button class="burger" id="burger-menu">☰</button>
+async function loadData() {
+    try {
+        const res = await fetch("https://api.binance.com");
+        const data = await res.json();
+        const top10 = data.filter(i => i.symbol.endsWith("USDT")).slice(0, 10);
+        
+        const container = document.getElementById("cards-container");
+        container.innerHTML = top10.map(c => `
+            <div class="swiper-slide">
+                <h3>${c.symbol.replace("USDT", "")}</h3>
+                <p style="font-size: 1.5rem; font-weight: 800">$${parseFloat(c.lastPrice).toLocaleString()}</p>
+                <span class="${parseFloat(c.priceChangePercent) >= 0 ? 'up' : 'down'}">
+                    ${c.priceChangePercent}%
+                </span>
+            </div>
+        `).join("");
 
-      <nav class="menu" id="nav-menu">
-        <a class="nav-pill" href="#">Features</a>
-        <a class="nav-pill" href="#">Markets</a>
-        <a class="nav-pill" href="#">Tools</a>
-        <a class="nav-pill" href="#">About</a>
-      </nav>
+        if (cryptoSwiper) cryptoSwiper.destroy();
+        cryptoSwiper = new Swiper(".mySwiper", {
+            slidesPerView: 1, spaceBetween: 20, loop: true,
+            autoplay: { delay: 3000 },
+            breakpoints: { 768: { slidesPerView: 3 }, 1200: { slidesPerView: 5 } }
+        });
+    } catch (e) { console.error(e); }
+}
 
-      <div class="actions pc-only">
-        <a class="btn ghost" href="#">Login</a>
-        <a class="btn primary" href="#">Sign up</a>
-      </div>
-    </div>
-  </header>
+document.getElementById('burger-menu').addEventListener('click', () => {
+    document.getElementById('nav-menu').classList.toggle('active');
+});
 
-  <section class="hero">
-    <div class="container hero-inner">
-      <div class="hero-copy">
-        <h1>Trust Is The <span class="accent">New Currency</span></h1>
-        <p>We build tools for cryptocurrency analytics: live prices and professional charts.</p>
-        <div class="cta">
-          <a class="btn primary" href="#">Get Started</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="cards-section">
-    <div class="container">
-      <div class="swiper mySwiper">
-        <div class="swiper-wrapper" id="cards-container">
-          <!-- Сюди JS вставить картки -->
-        </div>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="charts container">
-    <h2>Market Charts</h2>
-    <div class="charts-grid">
-      <div class="chart-box"><iframe src="https://s.tradingview.com" width="100%" height="400" frameborder="0"></iframe></div>
-      <div class="chart-box"><iframe src="https://s.tradingview.com" width="100%" height="400" frameborder="0"></iframe></div>
-    </div>
-  </section>
-
-  <footer class="site-footer">
-    <div class="container"><p>© 2024 CryptoLab. Powered by Binance API.</p></div>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net"></script>
-  <script src="js/script.js"></script>
-</body>
-</html>
+document.addEventListener("DOMContentLoaded", loadData);
