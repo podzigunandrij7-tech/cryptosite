@@ -80,23 +80,29 @@
 </head>
 <body>
   <!-- Header -->
-  <header class="site-header" id="header">
-    <div class="container nav">
-      <a class="logo" href="#"><span class="logo-dot"></span>CryptoLab</a>
-      <nav class="menu" id="menu">
-        <a class="nav-pill" href="#">Features</a>
-        <a class="nav-pill" href="#">Markets</a>
-        <a class="nav-pill" href="#">Tools</a>
-        <a class="nav-pill" href="#">Learn</a>
-        <a class="nav-pill" href="#">About</a>
-      </nav>
-      <div class="actions">
-        <a class="btn ghost auth-link" href="#">Login</a>
-        <a class="btn primary auth-link" href="#">Sign up</a>
-      </div>
-      
+  <header class="site-header">
+  <div class="container nav">
+    <a class="logo" href="#"><span class="logo-dot"></span>CryptoLab</a>
+    
+    <!-- Додаємо клас і стильний символ -->
+    <button class="burger" id="burger-menu" aria-label="Menu">
+      <span class="burger-icon">☰</span>
+    </button>
+
+    <nav class="menu" id="nav-menu">
+      <a href="#">Features</a>
+      <a href="#">Markets</a>
+      <a href="#">Tools</a>
+      <a href="#">About</a>
+    </nav>
+
+    <div class="actions pc-only">
+      <a class="btn ghost" href="#">Login</a>
+      <a class="btn primary" href="#">Sign up</a>
     </div>
-  </header>
+  </div>
+</header>
+
 
   <!-- Hero -->
   <section class="hero">
