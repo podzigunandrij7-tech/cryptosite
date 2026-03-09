@@ -83,41 +83,6 @@
   <header class="site-header" id="header">
     <div class="container nav">
       <a class="logo" href="#"><span class="logo-dot"></span>CryptoLab</a>
-      /* Мобільне меню (ховаємо за замовчуванням) */
-@media (max-width: 768px) {
-  .site-header .menu {
-    display: none !important; /* Ховаємо */
-    position: absolute;
-    top: 100%;
-    left: 0;
-    flex-direction: column !important;
-    background: #0b0f1a; /* Колір фону твого сайту */
-    width: 100%;
-    padding: 20px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-  }
-
-  /* Клас, який ми будемо додавати через JS */
-  .site-header .menu.active {
-    display: flex !important;
-  }
-
-  /* Стиль кнопки-бургера */
-  .burger {
-    display: block;
-    cursor: pointer;
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 1.5rem;
-  }
-}
-
-/* На комп'ютері кнопку ховаємо */
-@media (min-width: 769px) {
-  .burger { display: none; }
-}
-
       <nav class="menu" id="menu">
         <a class="nav-pill" href="#">Features</a>
         <a class="nav-pill" href="#">Markets</a>
