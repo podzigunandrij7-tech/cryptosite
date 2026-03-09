@@ -4,99 +4,53 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CryptoLab — Trust Is The New Currency</title>
-  <meta name="description" content="Dark theme crypto landing with live crypto prices." />
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com" rel="stylesheet">
   
-  <!-- Підключення зовнішнього CSS -->
   <link rel="stylesheet" href="css/styles.css" />
-  
-  <!-- Swiper CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
-
-  <style>
-    /* Тимчасові стилі для адаптивності, які ми обговорювали */
-    .nav { position: relative; display: flex; justify-content: space-between; align-items: center; }
-    
-    @media (max-width: 768px) {
-      .site-header .menu {
-        display: none; 
-        position: absolute;
-        top: 100%;
-        left: 0;
-        flex-direction: column;
-        background: #0b0f1a;
-        width: 100%;
-        padding: 20px;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
-        z-index: 1000;
-      }
-      .site-header .menu.active { display: flex; }
-      .burger { display: block; cursor: pointer; background: none; border: none; color: #fff; font-size: 2rem; line-height: 1; }
-      .actions { display: none; } /* Ховаємо кнопки входу на мобільних для чистоти */
-    }
-
-    @media (min-width: 769px) {
-      .burger { display: none; }
-      .site-header .menu { display: flex; gap: 20px; }
-    }
-
-    .charts-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-      padding: 20px 0;
-    }
-    .chart-container { background: #111; border-radius: 12px; overflow: hidden; }
-  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net" />
 </head>
 <body>
 
-  <!-- Header -->
-  <header class="site-header" id="header">
+  <header class="site-header">
     <div class="container nav">
       <a class="logo" href="#"><span class="logo-dot"></span>CryptoLab</a>
       
-      <!-- Кнопка бургер для мобільних -->
       <button class="burger" id="burger-menu">☰</button>
 
       <nav class="menu" id="nav-menu">
         <a class="nav-pill" href="#">Features</a>
         <a class="nav-pill" href="#">Markets</a>
         <a class="nav-pill" href="#">Tools</a>
-        <a class="nav-pill" href="#">Learn</a>
         <a class="nav-pill" href="#">About</a>
       </nav>
 
-      <div class="actions">
-        <a class="btn ghost auth-link" href="#">Login</a>
-        <a class="btn primary auth-link" href="#">Sign up</a>
+      <div class="actions pc-only">
+        <a class="btn ghost" href="#">Login</a>
+        <a class="btn primary" href="#">Sign up</a>
       </div>
     </div>
   </header>
 
-  <!-- Hero -->
   <section class="hero">
-    <div class="container hero-inner glass">
+    <div class="container hero-inner">
       <div class="hero-copy">
         <h1>Trust Is The <span class="accent">New Currency</span></h1>
-        <p>We build tools for cryptocurrency analytics: charts, live prices, mining calculators and exchange integrations.</p>
+        <p>We build tools for cryptocurrency analytics: live prices and professional charts.</p>
         <div class="cta">
-          <a class="btn cta-btn" href="#">Get Started</a>
-          <a class="btn ghost" href="#">Documentation</a>
+          <a class="btn primary" href="#">Get Started</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Carousel Section -->
   <section class="cards-section">
     <div class="container">
       <div class="swiper mySwiper">
         <div class="swiper-wrapper" id="cards-container">
-          <!-- Cards injected dynamically via JS -->
+          <!-- Сюди JS вставить картки -->
         </div>
         <div class="swiper-button-prev"></div>
         <div class="swiper-button-next"></div>
@@ -104,43 +58,19 @@
     </div>
   </section>
 
-  <!-- Charts Section -->
   <section class="charts container">
     <h2>Market Charts</h2>
     <div class="charts-grid">
-      <div class="chart-container">
-        <iframe src="https://s.tradingview.com" width="100%" height="400" frameborder="0" loading="lazy"></iframe>
-      </div>
-      <div class="chart-container">
-        <iframe src="https://s.tradingview.com" width="100%" height="400" frameborder="0" loading="lazy"></iframe>
-      </div>
-      <div class="chart-container">
-        <iframe src="https://s.tradingview.com" width="100%" height="400" frameborder="0" loading="lazy"></iframe>
-      </div>
-      <div class="chart-container">
-        <iframe src="https://s.tradingview.com" width="100%" height="400" frameborder="0" loading="lazy"></iframe>
-      </div>
+      <div class="chart-box"><iframe src="https://s.tradingview.com" width="100%" height="400" frameborder="0"></iframe></div>
+      <div class="chart-box"><iframe src="https://s.tradingview.com" width="100%" height="400" frameborder="0"></iframe></div>
     </div>
   </section>
 
   <footer class="site-footer">
-    <div class="container">
-      <p>© <span id="year"></span> CryptoLab. Live prices via CoinGecko & Binance API.</p>
-    </div>
+    <div class="container"><p>© 2024 CryptoLab. Powered by Binance API.</p></div>
   </footer>
 
-  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net"></script>
   <script src="js/script.js"></script>
-  
-  <script>
-    // Скрипт для відкриття меню
-    document.getElementById('burger-menu').addEventListener('click', function() {
-      document.getElementById('nav-menu').classList.toggle('active');
-    });
-    
-    // Встановлення поточного року
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
 </body>
 </html>
