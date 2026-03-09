@@ -146,6 +146,29 @@ body { margin:0; font-family:Inter,sans-serif; background: var(--bg); color:var(
   .carousel-item {
     min-width: 100% !important;
   }
+/* Ховаємо меню за замовчуванням (виносимо за екран або прозорість) */
+    .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%; /* Ховаємо праворуч */
+        width: 70%;
+        height: 100vh;
+        background: #1a1a1a;
+        transition: 0.4s ease;
+        display: flex;
+        flex-direction: column;
+        padding-top: 80px;
+    }
+
+    /* Коли додано клас active — меню виїжджає */
+    .nav-links.active {
+        right: 0;
+    }
+
+    /* Анімація самої кнопки (якщо хочеш, щоб палички перетворились на Х) */
+    .burger-menu.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .burger-menu.active span:nth-child(2) { opacity: 0; }
+    .burger-menu.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
 }
 
 
